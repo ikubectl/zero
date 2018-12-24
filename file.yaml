@@ -1,0 +1,15 @@
+current work directory:
+  pwd:
+  -P: real location
+  -L: link location
+change directory:
+  cd -: last directory
+ls:
+  ls -S: from large to small
+  ls -ut: atime from new to old
+  ls -X: file suffix sorted
+  ls -t: mtime sorted
+tree:
+  tree -d: appear directory
+  tree -L: level of number
+

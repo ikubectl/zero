@@ -1,0 +1,57 @@
+terminal:
+  /dev/tty7: ctrl+alt+f7
+  /dev/ttyS: serial terminal
+  /dev/pts: pseudo terminal,SSH remote connection
+shell:
+  echo ${SHELL}: present shell
+  cat /etc/shells: look over all shells on the system
+prompt:
+  $: common user
+  $PS1: ternimal prompt  
+  $PS2: end of line "/" continue,prompt
+  $PS3: shell select prompt
+hash:
+  hash -r: delete all hash table
+alias:
+  /etc/basrc: alias NAME="shell command"
+  ~/.bashrc: the same
+date:
+  date +%s: seconds; date -d @seconds
+  timedatectl set-timezone:
+  ntpdate ntp.aliyun.com:
+  cal -y:
+screen:
+  screen -S NAME: 
+  screen -x NAME: join in session
+  ctrl +a,d: detach
+  screen -r NAME: recover
+  screen -ls: 
+command line:
+  $(): ``
+brace:
+  {}:
+command history:
+  !:0 : excute last command removing args
+  !^ : last command first args
+  !$ : last command last args
+  !* : last command all args
+  HISTCONTROL: ignorespace
+bash shortcut key:
+  crtl l: clear up screen
+  ctrl s: lock screen output
+  ctrl q: allow screen ouput
+  ctrl c: terminal command
+  ctrl z: hang up command
+  ctrl u: romve to ahead
+  ctrl k: remove to end
+  ctrl a: move head
+  ctrl e: move end
+  alt f: move right a character
+  alt b: move left a character
+  alt r: delete all line
+  ctrl c: delete left to prefix
+  alt d: delete right to suffix
+  ctrl t: exchange position last character
+  alt t: exchange position last word
+
+

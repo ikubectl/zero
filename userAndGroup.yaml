@@ -1,0 +1,70 @@
+passwd format:
+  root:x:0:0:root:/root:/bin/bash: (1)user:(2)x that represent passwd placeholder:(3)uid:(4)gid:(5)comments:(6)home:(7)shell
+   
+shadow format:
+  shutdown:*:17632:0:99999:7::: (1)user:(2)passwd:(3)the data from 1970-1-1 to last change:(4)can be changed after days:(5)must be changed after days:(6)ahead of time warning:(7)days after be locked:(8)expire to what days form 1970-1-1:(9)reserved
+
+group format:
+  daemon:x:2: (1)group:(2)group passwd:(3)GID:(4)user list that current group as supplementary group
+
+gshadow format:
+  daemon::: (1)group:(2)group passwd:(3)group manager list who belong to can change passwd and member:(4)user list that current group as supplementary group
+
+shortcut key:
+  vigr: vim group
+  vipw: vim passwd
+  grpck: check /etc/group
+  pwck: check /etc/passwd
+
+useradd:
+  useradd -u uid -g gid -c "comments" -d home -s shell -G supplementary group -m create home -M not create home
+  useradd -D: default setting to create user
+usermod:
+  usermod -u new_uid -g new_gid -a -G supplementary group -s new_shell -c "comments" -d -m new_home
+userdel:
+  userdel -r: delete user and delete home
+passwd:
+  passwd -d user: delete user passwd
+  passwd -l user: lock user
+  passwd -u user: unlock user
+  passwd -e user: force next login to change passwd, in fact ,that effect /etc/shadow the third field
+  passwd --stdin: from standard input receive passwd,echo "hui" | passwd --stdin USERNAME
+chage:
+  chage -d last_days: chage -d 0 tom,such as passwd -e user 
+  chage -E : expire
+  chage -I: inactive or lock
+  chage -m: mindays
+  chage -M: maxdays
+  chage -W: warndays
+  example:  
+    chage -m 0 –M 42 –W 14 –I 7 tom
+    chage -E 2016-09-10 tom
+chfn:
+  chfn user: office,home phone,office phone
+chsh:
+  chsh -s SHELL user: change shell 
+finger:
+  finger user: name,shell,login or not ,mail
+gpasswd:
+  gpasswd -a user: add user to group
+  gpasswd -A user1,user2,...: set user who change to admin privileges
+  newgrp: chgroup temporary
+SUID:
+  chmod u+s binary-file
+SGID:
+  chmod g+s DIR: if user create file in the directory ,so the file group belongs to directory group not users
+chattr:
+  chattr +i: not delete,rename.change
+  chattr +a: only add to
+  lsattr: list property
+ACL:
+  setfacl -m u:pelerin:rw file: set user pelerin rw about file
+  setfacl -m u::rw file:
+  setfacl -Rm u:pelerin:rw DIR:
+  setfacl -M file old_file_acl:
+  setfacl -x u:pelerin:rw file: delete acl
+  setfacl -b file: delete all acl
+  mask:
+    effect owner other the biggest privileges:
+    setfacl -m mask::rw file:
+  getfacl: list all acl

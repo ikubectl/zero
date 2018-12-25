@@ -12,4 +12,6 @@ ls:
 tree:
   tree -d: appear directory
   tree -L: level of number
+file:
+  file -b: list result without file name
 

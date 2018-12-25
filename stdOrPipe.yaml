@@ -1,0 +1,19 @@
+standard input output error:
+  stdin: 0,default from input
+  stdout: 1,default output terminal,> file
+  stderr: 2,default output terminal,2> file
+  set -C: forbid override file that already exsits
+  &> : 2>&1, the sequenct is important
+  (): combine stdouts a file
+tr:
+  tr -c: take complementary set 
+  tr -d: delete the all of first characters
+  tr -s: squeeze repeats character
+  tr -t: the first character set transform the second character set ,such as tr -t "a-z" "A-Z" < /etc/fstab
+  cat : copy func,cat > file1 < file2(file2 -->file1 --override)
+pipe:
+  stderr: default can not retransmission by pipe,if you use 2>&1 or |&,that is easy to come true
+  lpr: echo "test print" | lpr -P printer_name
+tee:
+  tee -a: add to file and print screen ;comm1 |tee -a file |comm2 
+

@@ -1,0 +1,85 @@
+cat:
+  cat -E: print end-of-lines
+  cat -n: print line number
+  cat -s: squeeze null strings to one
+rev:
+  reverse: 
+more:
+less:
+head:
+  head -n:
+  head -c:
+tail:
+  tail -c:
+  tail -n:
+  tail -f:
+cut:
+  cut -d: delimiter
+  cut -f: fields
+  cut -c: character
+  cut --output-delimiter=: output delemiter
+paste: combine two files to one ,that means corresponding lines from each files
+  paste -d: delimiter
+  paste -s: paste one file at a time instead of in parallel
+wc:
+  wc -l: lines
+  wc -w: words
+  wc -c: bytes
+  wc -m: character
+  wc -L: longest line about the file
+sort:
+  sort -n: number
+  sort -f: fold lower upper character case
+  sort -u: unique,delete repeat lines
+  sort -t: delimiter
+  sort -k: field
+uniq:
+  uniq -c: repeat line number of times
+  uniq -d: repeat line
+  uniq -u: only print unique lines
+    sort file |uniq -c
+grep: grep prints the matching lines
+  grep -v: Invert the sense of matching, to select non-matching lines
+  grep -i: ignore lower upper character
+  grep -n: print rownum of matching lines
+  grep -c: print numbers of matching lines
+  grep -o: only print matching string 
+  grep -A: after matching lines
+  grep -B: before matching lines
+  grep -e: multiple pattern; grep -e "cat" -e "dog" ;egrep "(cat|dog)"
+  grep -w: matching words
+vim:
+  ZZ: save and quit
+  ZQ: quit
+  ex model:
+    : !command:
+    : r!command: print command output
+    : r file: read from other file
+    : w file: current file context write other file
+    : %: whole file
+    : %,s/pattern/replace/g
+    : next,prev,first,last,wall,qall,wqall
+  hikj: left right up down
+  [#]w: next word prefix
+  [#]e: next word suffix
+  [#]b: current or next word prefix,#:number
+  H: screen head
+  M: screen middle
+  L: screen bottom
+  0: head of line
+  $: end of line
+  G: last line
+  gg: first line
+  ctrl d: half screen to tail
+  J: delete current line \n
+  d$: delete to end of line
+  d0: delete to head of line
+  100iwangESC: inset 100 times 
+  ctrl w -->: windows change
+  ctrl w s: split
+  ctrl w v: vertical
+  ctrl w q: quit windows
+  ctrl w o: all windows quit
+  set ff=dos|unix:
+  set cul|cursorline:
+

@@ -49,7 +49,7 @@ bash shortcut key:
   alt f: move right a character
   alt b: move left a character
   alt r: delete all line
-  ctrl c: delete left to prefix
+  ctrl d: delete left to prefix
   alt d: delete right to suffix
   ctrl t: exchange position last character
   alt t: exchange position last word

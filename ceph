@@ -1,0 +1,36 @@
+Cephfs
+
+1.与kubernetes部署前基本操作类似
+·关闭防火墙，selinux
+·同步时间
+·设置主机名访问/etc/hosts
+   2.wget -O /etc/yum.repos.d/ceph.repo https://raw.githubusercontent.com/aishangwei/ceph-demo/master/ceph-deploy/ceph.repo
+  3.yum install ceph-deploy python-pip -y (master)
+  4.mkdir /ceph-cluster && cd my-cluster
+  5.ceph-deploy new master slave01 slave02
+  6.vim /ceph-cluster/ceph.conf
+[global]
+fsid = 38a8b8f1-4f5c-4353-83f3-4db3d7bd7ed8
+mon_initial_members = master, slave01, slave02
+mon_host = 192.168.10.51,192.168.10.54,192.168.10.116
+auth_cluster_required = cephx
+auth_service_required = cephx
+auth_client_required = cephx
+public network = 192.168.10.0/24 
+cluster network = 192.168.10.0/24
+   7.yum install -y ceph ceph-radosgw(all nodes)
+   8.ceph-deploy mon create-initial #config init monitors,gather all keys
+   9.ceph-deploy admin master slave01 slave02 #scp config all nodes
+   10.config osd scripts
+for dev in /dev/sdb /dev/sdc;do
+for node in master slave01 slave02;do
+ceph-deploy disk zap $node $dev
+ceph-deploy disk zap $node --data $dev
+done
+done
+11.deploy mgr, after L
+        ceph-deploy mgr create master slave01 slave02
+12.start dashboard,listen 7000
+        ceph mgr module enable dashboard
+13.deploy cephfs
+        Ceph-deploy mds create master

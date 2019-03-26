@@ -1,0 +1,107 @@
+Nosql: Not Only SQL www.nosql-databases.org
+	CAP 理论：c一致性，a可用性，p分区容错性
+	BASE 理论：CAP理论基础上一致性和可用性的权衡
+		最终一致性细分：
+			因果一致性
+			读自己写一致性
+			会话一致性
+			单调读一致性
+			时间轴一致性
+NoSQL数据库管理系统:
+	是一种技术流派，2009正式走进人们视野，非关系模型，不支持ACID数据库设计范式
+		ACID: A,原子性；C，一致性；I，隔离性；D，持久性
+	简单数据模型
+	元数据和数据分离
+	弱一致性
+	高吞吐量
+	高水平扩展能力和低端硬件集群
+NewSQL数据库管理系统：
+	代表产品：Clustrix、GenieDB、ScaleBase、NimbusDB、Drizzle
+
+	
+大数据的分析处理：
+	MapReduce:
+数据一致性的实现技术：
+	NRW:R+W>N强一致性
+	2PC:两段式提交
+	Paxos:
+	Vector Clock:向量时钟
+	
+数据存储模型：
+	列式存储模型
+		分布式文件系统之上提供支持随机读写分布式数据存储
+		HBase、Hypertable、Cassandra
+		以列为中心进行存储，将同一列数据存储在一起
+		快速查询，高可扩展性、易于实现分布式扩展
+	文档数据模型
+		非强事务需求的web应用
+		MongoDB、ElasticSearch、CouchBase server
+		键值模型、存储为文档
+		数据模型无须事先定义
+	键值数据模型
+		内容缓存、用于大量并行数据访问高负载场景
+		DynamoDB、redis、Riak
+		基于哈希表实现的key-value
+		查询迅速
+	图式数据模型
+		社交网络、推荐系统、关系图谱
+		Neo4j、Infinite Graph
+		图式结构
+		适应于图形计算场景
+安装使用：
+	[mongodb-org-4.0]
+	name=MongoDB Repository
+	baseurl=https://repo.mongodb.org/yum/redhat/$releasever/mongodb-org/4.0/x86_64/
+	gpgcheck=0
+	enabled=1
+	gpgkey=https://www.mongodb.org/static/pgp/server-4.0.asc
+	
+	yum install -y mongodb-org
+
+	server,shell,
+	Installing:
+ 
+	mongodb-org                            x86_64                     4.0.6-1.el7                          
+	Installing for dependencies:
+	mongodb-org-mongos                     x86_64                     4.0.6-1.el7                              
+	mongodb-org-server                     x86_64                     4.0.6-1.el7                                      
+	mongodb-org-shell                      x86_64                     4.0.6-1.el7                                    
+	mongodb-org-tools                      x86_64                     4.0.6-1.el7                         
+	
+	rpm -ql mongodb-org-server
+	rpm -ql mongodb-org-shell
+	rpm -ql mongodb-org-tools
+	
+配置文件：
+	/etc/mongod.conf
+	port=27017
+	dbpath=
+	bind
+	(chown mogod.mogod /path)
+	http_interface=28017
+	
+mongo客户端：
+	mongo 
+		mongo --host 127.0.0.1
+	>use testdb
+	>show dbs
+	>help
+	>db.help()
+	>db.stats()
+	>db.version()
+	>db.serverStatus()
+	>db.getCollectionNames()
+	>db.mycoll.find().help()
+	>db.mycoll.count()
+find高级用法：
+	>db.students.find({Age: {$gt: 30}}) [$gt $lt $lte $ne]
+	>db.students.find({Age: {$in: [20,40]}})
+	
+	CRUD操作：
+	_id：primary keys
+	相同结构的文档组成collection,具有索引，类似表
+JSON:
+	JavaScript Object Notation，扩展标记语言
+	名称/值对象的集合
+	value:有序列表（数组）
+	
